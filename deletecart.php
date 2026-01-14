@@ -16,17 +16,8 @@ if (!$cart_id || !$user_id) {
     exit;
 }
 
-// Koneksi database
-$conn = mysqli_connect('localhost', 'root', '', 'db_ecommerce');
-
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database connection failed'
-    ]);
-    exit;
-}
+// Gunakan konfigurasi dari dbconnect.php
+include_once 'dbconnect.php';
 
 // Hapus item dari cart
 $deleteQuery = "DELETE FROM cart WHERE id = $cart_id AND user_id = $user_id";

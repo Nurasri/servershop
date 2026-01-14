@@ -13,20 +13,8 @@ if (!$user_id) {
     exit;
 }
 
-// Koneksi database
-$conn = mysqli_connect('localhost', 'root', '', 'db_ecommerce');
-
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database connection failed'
-    ]);
-    exit;
-}
-
-// Set charset
-mysqli_set_charset($conn, "utf8");
+// Gunakan konfigurasi dari dbconnect.php
+include_once 'dbconnect.php';
 
 // Query ambil semua item cart user
 $query = "SELECT id, product_id, product_name, product_price, product_image, quantity, subtotal FROM cart WHERE user_id = $user_id ORDER BY created_at DESC";

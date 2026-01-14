@@ -21,20 +21,8 @@ if (!$user_id || !$product_id) {
     exit;
 }
 
-// Koneksi database
-$conn = mysqli_connect('localhost', 'root', '', 'db_ecommerce');
-
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database connection failed'
-    ]);
-    exit;
-}
-
-// Set charset
-mysqli_set_charset($conn, "utf8");
+// Gunakan konfigurasi dari dbconnect.php
+include_once 'dbconnect.php';
 
 // Cek apakah produk sudah ada di cart user ini
 $checkQuery = "SELECT id, quantity FROM cart WHERE user_id = $user_id AND product_id = $product_id";
