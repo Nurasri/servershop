@@ -1,16 +1,21 @@
 FROM php:8.1-apache
 
-# Disable semua MPM dulu
-RUN a2dismod mpm_event mpm_worker || true \
-    && a2enmod mpm_prefork
+# HAPUS SEMUA MPM
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_prefork.load
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html
+# AKTIFKAN HANYA PREFORK
+RUN ln -s /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
 
-COPY . /var/www/html/
+# PHP extensions (aman walau belum pakai DB)
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
-    && sed -ri 's/80/${PORT}/g' /etc/apache2/ports.conf \
-    && sed -ri 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf
+# Railway pakai PORT env
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf \
+    && sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf
 
-CMD ["sh", "-c", "apache2-foreground"]
+COPY . /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+
+CMD ["apache2-foreground"]
