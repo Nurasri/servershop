@@ -1,9 +1,9 @@
-FROM php:8.1-apache
+FROM php:8.1-cli
 
+# install mysqli extension
 RUN docker-php-ext-install mysqli
 
-COPY . /var/www/html/
+WORKDIR /app
+COPY . .
 
-EXPOSE 8080
-
-CMD ["apache2-foreground"]
+CMD ["sh", "-c", "php -S 0.0.0.0:$PORT"]
