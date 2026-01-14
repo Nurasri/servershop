@@ -1,7 +1,15 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'db_ecommerce');
+$host = getenv("DB_HOST");
+$port = getenv("DB_PORT");
+$user = getenv("DB_USER");
+$pass = getenv("DB_PASS");
+$db   = getenv("DB_NAME");
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+// Debug cepat (boleh dihapus nanti)
+// var_dump($host, $user, $db);
+
+$conn = new mysqli($host, $user, $pass, $db, $port);
+
+if ($conn->connect_error) {
+    die("DB Connection Failed: " . $conn->connect_error);
+}
