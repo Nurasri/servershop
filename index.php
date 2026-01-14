@@ -1,2 +1,2 @@
 <?php
-echo "Backend servershop aktif 🚀";
+echo "SERVER SHOP RAILWAY OK";
