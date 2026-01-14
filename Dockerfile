@@ -1,5 +1,9 @@
 FROM php:8.1-apache
 
+# Disable semua MPM dulu
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork
+
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 
 COPY . /var/www/html/
